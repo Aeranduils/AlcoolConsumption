@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 #                                                   USER PARAMETERS                                                    #
 ########################################################################################################################
 
-# Define the pathname of the data file to exploit
+# Definit le chemin d'accès pour chaque dataset
 data_file_pathname_mat = "C:\\Users\\FThef\\Desktop\\student-mat.csv"
 data_file_pathname_por = "C:\\Users\\FThef\\Desktop\\student-por.csv"
 
@@ -15,11 +15,11 @@ data_file_pathname_por = "C:\\Users\\FThef\\Desktop\\student-por.csv"
 #                                                      LOAD DATA                                                       #
 ########################################################################################################################
 
-# Open and load the data
+# Ouvre et charge les données dans un data frame
 my_data_frame_mat = pd.read_csv(data_file_pathname_mat, sep=",", header=0)
 my_data_frame_por = pd.read_csv(data_file_pathname_por, sep=",", header=0)
 
-# Print some instances in the console
+# Affiche quelques enregistrements
 print(my_data_frame_mat.head())
 
 ########################################################################################################################
@@ -33,36 +33,64 @@ my_data_array = my_data_frame_mat.values
 data_shape = my_data_array.shape
 
 # Print the shape information in the console
-print("\nThere is " + str(data_shape[0]) + " instances and " + str(data_shape[1]) + " features")
+print("\nIl y a " + str(data_shape[0]) + " enregistrements et " + str(data_shape[1]) + " attributs")
 
 # Print the feature names in the console
-print("\nThe features are:")
+print("\nLes catégories sont:")
 for column_name in my_data_frame_mat.columns:
     print("     -" + column_name)
 
-# Get the min and max values for each feature and print them in the console
+# Affiches les valeurs min et max ou les valeurs possibles pour chaque attribut
 print("\n")
 for column_name in my_data_frame_mat.columns:
     print("-" + column_name)
-
     column_data = my_data_frame_mat[column_name]
 
-    if column_data.dtype != np.str:
+    if column_data.dtype != object:
 
         min_value = np.min(column_data)
         max_value = np.max(column_data)
-        #nan_presence = np.sum(np.isnan(column_data))
+        nan_presence = np.sum(np.isnan(column_data))
 
-        print("     the minimum value is " + str(min_value) + " and the maximum value is " + str(max_value))
-        #print("         there are NaN value: " + str(nan_presence))
+        print("     La valeur minimal " + str(min_value) + " et le maximum est " + str(max_value))
+        print("     Nombre de NaN: " + str(nan_presence))
+    else :
+        values = np.unique(column_data)
+        print("     Les valeurs possibles sont " + str(values))
 
-# Print information on the "DEATH_EVENT" column
+
+# Affiche les infos de la colonne 'famsup'
 class_id = np.unique(my_data_frame_mat["famsup"])
-print("\nInformation on the 'famsup' column:")
+print("\nInformation sur la colonne 'famsup':")
 for id_value in class_id:
-
     indices = np.where(my_data_frame_mat["famsup"] == id_value)
-    print("     -" + str(id_value) + " with " + str(indices[0].size) + " instances")
+    print("     -" + str(id_value) + " avec " + str(indices[0].size) + " enregistrements")
+
+# Affiche le nombre de NaN par attribut
+print("\nNombre de NaN par attribut")
+print(my_data_frame_mat.isna().sum())
+
+# Affiche les attributs et leur type
+print(my_data_frame_mat.info())
+
+
+# Affichage des stats par attributs
+data_frame_stat = my_data_frame_mat[['age','absences', 'G1', 'G2', 'G3']]
+
+print("\nStatistiques: ")
+print(data_frame_stat.describe())
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
