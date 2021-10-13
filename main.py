@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import graphics
 
 import matplotlib.pyplot as plt
 
@@ -66,13 +67,8 @@ for id_value in class_id:
     indices = np.where(my_data_frame_mat["famsup"] == id_value)
     print("     -" + str(id_value) + " avec " + str(indices[0].size) + " enregistrements")
 
-# Affiche le nombre de NaN par attribut
-print("\nNombre de NaN par attribut")
-print(my_data_frame_mat.isna().sum())
-
 # Affiche les attributs et leur type
 print(my_data_frame_mat.info())
-
 
 # Affichage des stats par attributs
 data_frame_stat = my_data_frame_mat[['age','absences', 'G1', 'G2', 'G3']]
@@ -80,8 +76,42 @@ data_frame_stat = my_data_frame_mat[['age','absences', 'G1', 'G2', 'G3']]
 print("\nStatistiques: ")
 print(data_frame_stat.describe())
 
+########################################################################################################################
+#                                              PRE TRAITEMENT DES DONNNEES                                             #
+########################################################################################################################
+
+#Vérification des valeurs manquantes
+
+#Affiche le nombre de NaN par attribut
+print("\nNombre de NaN par attribut")
+print(my_data_frame_mat.isna().sum())
+
+#Modification des YES/NO en 0/1
+my_data_frame_mat = my_data_frame_mat.replace({'yes':'1', 'no':'0'})
+
+class_id = np.unique(my_data_frame_mat["school"])
 
 
+for id_value in class_id:
+
+    indices = np.where(my_data_frame_mat["school"] == id_value)
+    age = my_data_frame_mat["age"].values[indices]
+
+    data_label = "age " + str(id_value)
+    plt.hist(age, alpha=0.5, label=data_label, edgecolor="k")
+
+plt.title("Distribution of people age vs. DEATH AND NOT DEATH")
+plt.xlabel("Age of people")
+plt.ylabel("Number of people")
+plt.legend(loc="upper right")
+plt.show()
+
+
+stat_array = data_frame_stat.values
+plt.boxplot(stat_array)
+plt.title('Boite a moustache')
+plt.legend(loc="upper right")
+plt.show()
 
 
 
